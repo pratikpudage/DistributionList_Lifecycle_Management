@@ -1,36 +1,71 @@
-# DistributionList_Lifecycle_Management
-Project to identify and report distribution lists usage
+# Distribution List Lifecycle Management
 
-# LinkedIn Article
-https://www.linkedin.com/article/edit/7278499791079124992/
+A project to identify and report distribution list (DL) usage.
 
-# How this works
+## LinkedIn Article
 
-1. Building the Baseline: A Full Inventory of DLs
-The first step in managing DL lifecycles is getting a solid understanding of what you’re working with. In many organizations, especially those using hybrid setups with Exchange Online, this is easier said than done. My PowerShell script pulls in a wealth of information for every distribution list:
+For additional details, read the related article on [LinkedIn](https://www.linkedin.com/article/edit/7278499791079124992/).
 
-The name of the DL
+---
 
-The primary SMTP address
+## How It Works
 
-The email address of the manager responsible for the DL
+### 1. Building the Baseline: A Full Inventory of DLs
 
-The member count (to gauge the size and potential impact of the list)
+The first step in managing DL lifecycles is obtaining a comprehensive inventory. This can be challenging, especially in hybrid setups with Exchange Online. To address this, the `Get-DLBaseline.ps1` PowerShell script gathers detailed information for each DL, including:
 
-The status of the DL (whether it’s active or deleted)
+- **Name of the DL**
+- **Primary SMTP Address**
+- **Manager's Email Address**
+- **Member Count** (to assess size and impact)
+- **Status** (active or deleted)
 
-This data is captured and stored in a single Excel file called DistributionListsBaseline.xlsx. This baseline serves as the foundation for future comparisons, providing a snapshot of all DLs in the organization. It answers the essential questions: What DLs exist? Who manages them? How many users rely on them?
+The script outputs the data to an Excel file named `DistributionLists.xlsx`. This baseline provides a snapshot of all DLs, answering critical questions:
 
+- What DLs exist?
+- Who manages them?
+- How many users depend on them?
 
+Run the `Get-DLBaseline.ps1` script to export this initial baseline.
 
-2. Tracking Activity: Is the DL Still Being Used?
-Next comes the critical step of determining whether a DL is still actively used. For this, I created another custom PowerShell script that integrates with Exchange Online’s message tracing capabilities. The script tracks emails sent to each DL over a configurable period (up to the last 10 days due to Exchange Online limitations).
+---
 
-This step is crucial because while the baseline gives you a list of DLs, it doesn’t tell you which ones are still in use. By pulling in message tracking data, we can see which DLs are receiving emails—an indicator of active use. This information is stored in a separate Excel file, MsgTrace.xlsx, to ensure modularity and easier updates in the future.
+### 2. Tracking Activity: Is the DL Still Being Used?
 
+The next step is determining if a DL is still active. The `Get-DLMessageTrace.ps1` PowerShell script leverages Exchange Online’s message tracing capabilities to track emails sent to each DL over a configurable period (up to 10 days due to Exchange Online limitations).
 
+This script provides insights into active use, as the baseline alone doesn't indicate whether a DL is receiving emails. Message tracking data is stored in a separate file named `MsgTraceDetails.xlsx` for modularity and easier updates.
 
-3. Merging Insights: A Comprehensive View of DL Usage
-Finally, the third part of the solution ties everything together. This custom PowerShell script takes the message tracking data from MsgTrace.xlsx and merges it with the baseline from DistributionListsBaseline.xlsx. The result? A complete, up-to-date view of every DL in the system, along with the LastEmailRecdDate field, which shows the most recent email activity for each list.
+Run the `Get-DLMessageTrace.ps1` script to export message tracking details.
 
-This gives IT teams a clear, actionable report on which DLs are active, which ones are dormant, and which can potentially be deleted with confidence. The final Excel sheet provides a streamlined way to identify the status of any distribution list, helping you maintain a clean and efficient communication system.
+---
+
+### 3. Merging Insights: A Comprehensive View of DL Usage
+
+The `Process-DLMessageTraceInfo.ps1` script merges the baseline data (`DistributionLists.xlsx`) with message tracking details (`MsgTraceDetails.xlsx`). This process results in a comprehensive report with key insights, including:
+
+- **LastEmailRecdDate**: The most recent email activity for each DL.
+
+The final Excel report provides IT teams with a clear, actionable view of:
+
+- Active DLs
+- Dormant DLs
+- DLs ready for deletion
+
+This streamlined report supports efficient lifecycle management and helps maintain a clean communication system.
+
+---
+
+## Scripts
+
+- **`Get-DLBaseline.ps1`**: Exports an initial inventory of all DLs.
+- **`Get-DLMessageTrace.ps1`**: Tracks email activity for DLs.
+- **`Process-DLMessageTraceInfo.ps1`**: Merges baseline and activity data into a final report.
+
+---
+
+## Output Files
+
+1. **`DistributionLists.xlsx`**: Baseline of all DLs.
+2. **`MsgTraceDetails.xlsx`**: Email activity data for each DL.
+3. **Final Report**: A merged Excel file with a comprehensive overview of DL usage.
