@@ -68,4 +68,4 @@ This streamlined report supports efficient lifecycle management and helps mainta
 
 1. **`DistributionLists.xlsx`**: Baseline of all DLs.
 2. **`MsgTraceDetails.xlsx`**: Email activity data for each DL.
-3. **Final Report**: A merged Excel file with a comprehensive overview of DL usage.
+3. **Final Report**: A merged Excel file with a comprehensive overview of DL usage is saved under **`DistributionLists.xlsx`**.
